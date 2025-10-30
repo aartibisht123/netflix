@@ -13,25 +13,14 @@ const [password, setPassword] = useState("");
 const [loading, setLoading] = useState(false);
 const navigate = useNavigate();
 
-// const user_auth = async (event) =>{
-//     event.preventDefault();
-//     if(signState==="Sign In"){
-//        await login(email, password) ;
-//     }else{
-//         await signup(name, email, password);
-//     }
-// }
-
-     const user_auth = async (event) => {
+const user_auth = async (event) =>{
     event.preventDefault();
-    setLoading(true);
-
-    try {
-      if (signState === "Sign In") {
-        await login(email, password);
-      } else {
+    if(signState==="Sign In"){
+       await login(email, password) ;
+    }else{
         await signup(name, email, password);
-      }
+    }
+}
 
       // ✅ Redirect to homepage after successful login/signup
       navigate("/");
