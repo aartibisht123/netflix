@@ -20,16 +20,20 @@ const Player = () => {
   };
 
   useEffect(() => {
-    const fetchVideo = async () => {
+    const fetchTrailer = async () => {
       try {
         const res = await fetch(
           `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
           options
         );
         const data = await res.json();
-        console.log("TMDB video data:", data);
 
-        // ✅ Pick only YouTube trailer or teaser
+        if (!data.results || data.results.length === 0) {
+          setError("No videos found for this movie.");
+          return;
+        }
+
+        // ✅ Find the first YouTube trailer or teaser
         const trailer = data.results.find(
           (vid) =>
             vid.site === "YouTube" &&
@@ -39,33 +43,40 @@ const Player = () => {
         if (trailer) {
           setApiData(trailer);
         } else {
-          setError("No trailer available for this movie.");
+          setError("No YouTube trailer available for this movie.");
         }
       } catch (err) {
         console.error("Error fetching video:", err);
-        setError("Failed to load video.");
+        setError("Failed to load trailer. Please try again.");
       }
     };
 
-    fetchVideo();
+    fetchTrailer();
   }, [id]);
 
   return (
     <div className="player">
-      <img src={back_arrow_icon} alt="Back" onClick={() => navigate(-1)} />
+      <img
+        src={back_arrow_icon}
+        alt="Go Back"
+        className="back-btn"
+        onClick={() => navigate(-1)}
+      />
 
       {apiData && apiData.key ? (
         <iframe
           width="90%"
           height="90%"
           src={`https://www.youtube.com/embed/${apiData.key}`}
-          title={apiData.name || "Trailer"}
+          title={apiData.name}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         ></iframe>
       ) : (
-        <p style={{ color: "white" }}>{error || "Loading..."}</p>
+        <p style={{ color: "white", marginTop: "20px" }}>
+          {error || "Loading trailer..."}
+        </p>
       )}
 
       {apiData && (
@@ -80,7 +91,6 @@ const Player = () => {
 };
 
 export default Player;
-
 
 
 // import React, { useEffect, useState } from "react";
