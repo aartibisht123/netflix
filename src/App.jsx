@@ -1,42 +1,39 @@
 import React, { useEffect } from "react";
-import Home from "./pages/Home/Home";
+import Home from './pages/Home/Home';
+import { Routes,Route, useNavigate } from "react-router-dom";
 import Login from "./pages/Login/Login";
 import Player from "./pages/Player/Player";
-import { Routes, Route, useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("Logged In");
-        navigate("/"); // ✅ redirect to Home after login
-      } else {
-        console.log("Logged Out");
-        navigate("/login"); // redirect to Login if logged out
-      }
-    });
-
-    // cleanup on unmount
-    return () => unsubscribe();
-  }, [navigate]);
+useEffect(()=>{
+  onAuthStateChanged(auth, async(user)=>{
+    if (user) {
+      console.log("Logged In");
+    }else{
+      console.log("Logged Out");
+      navigate('/login');
+    }
+      })
+},[]);
 
   return (
     <div>
-      <ToastContainer theme="dark" />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/player/:id" element={<Player />} />
-      </Routes>
+          <ToastContainer theme="dark"/>
+    <Routes>
+    <Route path='/' element={<Home/>}/>
+    <Route path='/login' element={ <Login/>}/>
+    <Route path='/player/:id' element={<Player/>}/>
+    </Routes>
+       
     </div>
-  );
-}
+    )}
 
-export default App;
+export default App
