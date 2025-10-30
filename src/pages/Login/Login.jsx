@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import './Login.css'
 import logo from '../../assets/logo.png'
+import { useNavigate } from "react-router-dom";
 import { login, signup } from "../../firebase";
 
 const Login = () =>{
@@ -9,15 +10,40 @@ const[signState, setSignState] = useState("Sign In");
 const [name, setName] = useState("");
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
+const navigate = useNavigate();
 
-const user_auth = async (event) =>{
+// const user_auth = async (event) =>{
+//     event.preventDefault();
+//     if(signState==="Sign In"){
+//        await login(email, password) ;
+//     }else{
+//         await signup(name, email, password);
+//     }
+// }
+
+     const user_auth = async (event) => {
     event.preventDefault();
-    if(signState==="Sign In"){
-       await login(email, password) ;
-    }else{
+    setLoading(true);
+
+    try {
+      if (signState === "Sign In") {
+        await login(email, password);
+      } else {
         await signup(name, email, password);
+      }
+
+      // ✅ Redirect to homepage after successful login/signup
+      navigate("/");
+    } catch (error) {
+      console.error("Auth Error:", error);
+      alert("Login or Signup failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
-}
+  };
+
+
+    
 
     return(
         <div className="login">
