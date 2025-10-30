@@ -22,15 +22,15 @@ const user_auth = async (event) =>{
     }
 }
 
-      // ✅ Redirect to homepage after successful login/signup
-      navigate("/");
-    } catch (error) {
-      console.error("Auth Error:", error);
-      alert("Login or Signup failed. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     // ✅ Redirect to homepage after successful login/signup
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.error("Auth Error:", error);
+  //     alert("Login or Signup failed. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
 
     
